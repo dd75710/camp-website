@@ -1,30 +1,63 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>訪問カウンター</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
-</head>
-<style>
-    h1{
-        color: palevioletred;
+  <style>
+    /* 背景色を青に */
+    body {
+        background-color: rgb(59, 168, 223);
+        color: white;
+        font-family: sans-serif;
     }
-    h2{
+
+    h1 {
+        color: palevioletred;
+        text-align: center;
+    }
+
+    h2 {
         color: pink;
     }
-    a{
+
+    a {
         font-weight: bold;
         color: rgb(43, 226, 162);
     }
-</style>
+
+    /* フェードインアニメーション */
+    .anim-box.fadein.is-animated {
+        animation: fadeIn 2s cubic-bezier(0.33, 1, 0.68, 1) forwards;
+    }
+
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+
+    /* メッセージの表示 */
+    #visitMessage {
+        text-align: center;
+        font-size: 1.5rem;
+        margin-top: 20px;
+    }
+
+  </style>
+</head>
 <body>
 
 <main class="container">
   <h1>ようこそ！</h1>
-  <p id="visitMessage"></p>
+  <p id="visitMessage" class="anim-box fadein is-animated"></p>
 </main>
 
 <script>
-
   // localStorageから訪問回数を取得し、数値に変換（初回訪問時は0）
   let visits = parseInt(localStorage.getItem('visits')) || 0;
 
@@ -37,8 +70,17 @@
   if (visits === 1) {
     visitMessage.textContent = '初めての訪問ありがとうございます！';
   } else {
-    visitMessage.textContent = `これはあなたの${visits}回目の訪問です！`;
+    visitMessage.innerHTML = `これはあなたの <strong>${visits}</strong> 回目の訪問です！`;
+
   }
+
+  // 5秒ごとにフェードインさせる
+  setInterval(() => {
+    visitMessage.classList.remove('is-animated');  // アニメーションを一旦取り除く
+    void visitMessage.offsetWidth;  // リセットするためにフレームを強制的に再計算
+    visitMessage.classList.add('is-animated');  // 再度アニメーションを追加
+  }, 5000);  // 5秒間隔
 </script>
+
 </body>
 </html>
