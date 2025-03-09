@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <title>今日のポケモン</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+        <style>
+            #pokemon {
+                width: 300px;
+            }
+            #pokemonImage{
+                width: 100%;
+            }
+        </style>
+    </head>
+    <body>
+
+        <main class = "containter">
+            <h1>今日のポケモン</h1>
+
+            <div id = "pokemon">
+                <h2 id = "pokemonName"></h2>
+                <img id ="pokemonImage" src ="">
+            </div>
+        </main>
+
+        <script>
+            let pokemonName = document.getElementById('pokemonName');
+            let pokemonImage = document.getElementById('pokemonImage');
+
+            let pokemonNumber = Math.floor(Math.random() * 649) + 1;
+
+            fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokemonNumber}`)
+            .then(function (response) {
+                // レスポンスをコンソールに出力
+                console.log(response);
+
+                // JSONデータを取得して次の .then() に渡す
+                return response.json();
+                })
+            .then(function(data) {
+      // JSONデータをコンソールに出力
+      console.log(data);
+                const japaneseName = data.names.find(name => name.language.name === 'ja');
+      // ポケモンの名前を表示
+      if (japaneseName) {
+          pokemonName.textContent = japaneseName.name;
+        } else {
+          pokemonName.textContent = '日本語名が見つかりませんでした';
+        }
+      // ポケモンの画像を表示
+      fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonNumber}`)
+          .then(function (response) {
+            return response.json();
+          })
+          .then(function (data) {
+            if (data.sprites && data.sprites.front_default) {
+              pokemonImage.src = data.sprites.front_default;
+            } else {
+              pokemonImage.src = ''; // 画像がない場合は空にする
+            }
+          });
+      })
+    //   pokemonImage.src = data.sprites.front_default;
+    
+    .catch(function(error) {
+      // エラーが発生した場合はコンソールに出力
+      console.error(`エラーが発生しました:${error}`);
+    });
+        </script>
+    </body>
+</html>
