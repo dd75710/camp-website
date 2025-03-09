@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <title>今日のポケモン</title>
+    <title>サインイン</title>
    
     <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.css" />
     <script type="module">
         // Import the functions you need from the SDKs you need
         // import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
@@ -78,6 +80,18 @@
         
         ui.start('#firebaseui-auth-container', uiConfig);
       </script>
+      <script>
+        // ログアウトボタンがクリックされたときの処理
+        document.getElementById("logout-button").addEventListener("click", function() {
+            firebase.auth().signOut().then(function() {
+                console.log("ログアウト成功");
+                // ログアウト後、必要なUIの更新を行う
+                window.location.reload();
+            }).catch(function(error) {
+                console.error("ログアウトエラー: ", error);
+            });
+        });
+    </script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
     
     <style>
@@ -89,23 +103,23 @@
             color: aqua;
         }
 
-        #pokemon {
+        /* #pokemon {
             width: 300px;
             text-align: center;
         }
 
         /* 画像の基本スタイル */
-        #pokemonImage {
+        /* #pokemonImage {
             width: 100%;
             cursor: pointer; /* クリックできるように */
-            animation: moveUpDown 1.5s infinite alternate ease-in-out;
-        }
+            /* animation: moveUpDown 1.5s infinite alternate ease-in-out;
+        } */
 
         /* 上下にゆっくり動く */
-        @keyframes moveUpDown {
+        /* @keyframes moveUpDown {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-10px); }
-        }
+        } */ 
 
         /* クリックしたときにジャンプ */
         
@@ -114,23 +128,18 @@
 </head>
 <body>
     <div id="firebaseui-auth-container"></div>
+    <div id="userDiv" style="display: none;">
+        <h2>ようこそ！</h2>
+        <p id="userEmail"></p>
+        <button id="logoutButton">ログアウト</button>
+    </div>
     <main class="container">
-        <h1>今日のポケモン</h1>
+        <h1>サインインしましょう</h1>
 
-        <div id="pokemon">
-            <h2 id="pokemonName">ポケモンを取得中...</h2>
-            <img id="pokemonImage" src="" alt="ポケモンの画像">
-            <audio id="pokemonCry" controls hidden></audio>
-            <button id="playCry" style="display: none;">鳴き声を再生</button>
-        </div>
-        <div id="userDiv" style="display: none;">
-            <h2>ようこそ！</h2>
-            <p id="userEmail"></p>
-            <button id="logoutButton">ログアウト</button>
-        </div>
+        
     </main>
 
-    <script>
+    <!-- <script>
         let pokemonName = document.getElementById('pokemonName');
         let pokemonImage = document.getElementById('pokemonImage');
         let pokemonCry = document.getElementById('pokemonCry');
@@ -197,7 +206,7 @@
         playCryButton.addEventListener("click", function () {
             pokemonCry.play();
         });
-    </script>
+    </script> -->
 
 </body>
 
